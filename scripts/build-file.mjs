@@ -48,4 +48,6 @@ await build({
 
 await mkdir(distDir, { recursive: true });
 await copyFile(rootIndexFile, distIndexFile);
+await copyFile(outFile, resolve(distDir, "file-app.js"));
+await copyFile(resolve(projectRoot, "file-app.css"), resolve(distDir, "file-app.css"));
 await cp(downloadsDir, distDownloadsDir, { recursive: true, force: true });
