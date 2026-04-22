@@ -55,9 +55,18 @@
     <script>
       (function () {
         var normalizedPath = window.location.pathname.replace(/\\/g, "/");
+        var host = window.location.hostname || "";
+        var isLocalDevHost =
+          host === "localhost" ||
+          host === "127.0.0.1" ||
+          host === "0.0.0.0" ||
+          host === "::1";
+
         window.__tax12FileMode = window.location.protocol === "file:";
+        window.__tax12UseViteSource = !window.__tax12FileMode && isLocalDevHost;
         window.__tax12AssetBase = /\/dist\/index\.html$/i.test(normalizedPath) ? "../" : "./";
-        if (window.__tax12FileMode) {
+
+        if (!window.__tax12UseViteSource) {
           var fileCss = document.createElement("link");
           fileCss.rel = "stylesheet";
           fileCss.href = window.__tax12AssetBase + "file-app.css";
@@ -78,11 +87,11 @@
     <script>
       (function () {
         var script = document.createElement("script");
-        if (window.__tax12FileMode) {
-          script.src = window.__tax12AssetBase + "file-app.js";
-        } else {
+        if (window.__tax12UseViteSource) {
           script.type = "module";
           script.src = "/src/main.tsx";
+        } else {
+          script.src = window.__tax12AssetBase + "file-app.js";
         }
         document.body.appendChild(script);
       })();
